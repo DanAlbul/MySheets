@@ -1,12 +1,13 @@
-import {Excel} from '@/components/excel/Excel'
-import {Header} from '@/components/header/Header'
-import {Toolbar} from '@/components/toolbar/Toolbar'
-import {Formula} from '@/components/formula/Formula'
-import {Table} from '@/components/table/Table'
-import './scss/index.scss'
+import "../src/scss/index.scss";
 
-const excel = new Excel('#app', {
-  components: [Header, Toolbar, Formula, Table]
-})
+import { Excel } from "../src/components/excel/Excel.js";
+import { Header } from "../src/components/header/Header.js";
+import { Toolbar } from "../src/components/toolbar/Toolbar.js";
+import { Formula } from "../src/components/formula/Formula.js";
+import { Table } from "../src/components/table/Table.js";
 
-excel.render()
+const excel = new Excel("#app", {
+   components: [Header, Toolbar, Formula, Table],
+});
+
+excel.render();
