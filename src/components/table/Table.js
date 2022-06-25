@@ -8,9 +8,11 @@ import { TableSelection } from "../table/TableSelection.js";
 export class Table extends ExcelComponent {
   static className = "excel__table";
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
-      listeners: ["mousedown", "keydown"],
+      name: "Table",
+      listeners: ["mousedown", "keydown", "input"],
+      ...options,
     });
   }
 
@@ -25,8 +27,20 @@ export class Table extends ExcelComponent {
   init() {
     super.init();
 
+
     const $cell = this.$root.find('[data-id="0:0"]');
+
+    // Sending default cell data to formula after initialization
+    this.$emit("table:select", $cell.$el.innerHTML); 
     this.selection.select($cell);
+
+    this.$on("formula:input", (text) => {
+      this.selection.current.text(text);
+    });
+
+    this.$on("formula:done", () => {
+      this.selection.current.focus();
+    });
   }
 
   onMousedown(event) {
@@ -42,6 +56,9 @@ export class Table extends ExcelComponent {
       } else {
         this.selection.select($target);
       }
+
+      const text = event.target.textContent.trim();
+      this.$emit("table:select", text);
     }
   }
 
@@ -62,6 +79,15 @@ export class Table extends ExcelComponent {
       const id = this.selection.current.id(true);
       const $next = this.$root.find(nextSelector(key, id));
       this.selection.select($next);
+
+      this.$emit("table:select", $next.$el.innerHTML);
+    }
+  }
+
+  onInput(event) {
+    if (isCell(event)) {
+      //const text = event.target.textContent.trim();
+      this.$emit("table:input", $(event.target).text());
     }
   }
 }
